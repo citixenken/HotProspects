@@ -6,31 +6,61 @@
 //
 
 import SwiftUI
+import UserNotifications
+
 
 struct ContentView: View {
     
     @State private var backgroundColor = Color.red
     
     var body: some View {
-        
-        List {
-            Text("Baby Keem")
-                .swipeActions {
-                    Button {
-                        print("Hi!")
-                    } label: {
-                        Label("Send message", systemImage: "message")
+        VStack {
+            Button("Request Permission") {
+                UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+                    if success {
+                        print("Successful! All set.")
+                    } else if let error = error {
+                        print(error.localizedDescription)
                     }
                 }
-                .swipeActions(edge: .leading) {
-                    Button {
-                        print("Hey!")
-                    } label: {
-                        Label("Pin", systemImage: "pin")
-                    }
-                    .tint(.mint)
-                }
+            }
+            Button("Schedule Notification") {
+                let content = UNMutableNotificationContent()
+                content.title = "Feed the hunger within"
+                content.subtitle = "Stay hungry"
+                content.sound = UNNotificationSound.default
+                
+                //show this notification five minutes from now
+                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+                
+                //choose a random identifier
+                let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+                
+                //add our notiification request
+                UNUserNotificationCenter.current().add(request)
+                
+            }
         }
+        
+        
+//        List {
+//            Text("Baby Keem")
+//                .swipeActions {
+//                    Button {
+//                        print("Hi!")
+//                    } label: {
+//                        Label("Send message", systemImage: "message")
+//                    }
+//                }
+//                .swipeActions(edge: .leading) {
+//                    Button {
+//                        print("Hey!")
+//                    } label: {
+//                        Label("Pin", systemImage: "pin")
+//                    }
+//                    .tint(.mint)
+//                }
+//        }
         //        VStack {
         //            Text("Hello, CK!")
         //                .padding()
