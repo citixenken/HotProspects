@@ -8,28 +8,42 @@
 import SwiftUI
 
 struct ContentView: View {
-    
-    @ObservedObject var updater = DelayedUpdater()
-    
     var body: some View {
-        Text("Value is: \(updater.value)")
-    }
-}
-
-@MainActor class DelayedUpdater: ObservableObject {
-    var value = 0 {
-        willSet {
-            objectWillChange.send()
-        }
+        Image("example")
+            .interpolation(.none)
+            .resizable()
+            .scaledToFit()
+            .frame(maxHeight: .infinity)
+            .background(.black)
+            .ignoresSafeArea()
     }
     
-    init() {
-        for i in 1...10 {
-            DispatchQueue.main.asyncAfter(deadline: .now() + Double(i)) {
-                self.value += 1
-            }
-        }
-    }
+//    @State private var output = ""
+//
+//    var body: some View {
+//        Text(output)
+//            .task {
+//                await fetchReadings()
+//            }
+//}
+    
+//    func fetchReadings() async {
+////        do {
+////            let url = URL(string: "https://hws.dev/readings.json")!
+////            let (data, _) = try await URLSession.shared.data(from: url)
+////            let readings = try JSONDecoder().decode([Double].self, from: data)
+////            output = "Found \(readings.count) readings"
+////        } catch {
+////            print("Download error")
+////        }
+//
+//        let fetchTask = Task { () -> String in
+//            let url = URL(string: "https://dev/readings.json")!
+//            let (data, _) = try await URLSession.shared.data(from: url)
+//            let readings = try JSONDecoder().decode([Double].self, from: data)
+//            return "Found \(readings.count) readings"
+//        }
+//    }
 }
 
 struct ContentView_Previews: PreviewProvider {
