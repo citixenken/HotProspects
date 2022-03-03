@@ -5,42 +5,51 @@
 //  Created by Ken Muyesu on 28/02/2022.
 //
 
+import SamplePackage
 import SwiftUI
 import UserNotifications
 
 
 struct ContentView: View {
     
-    @State private var backgroundColor = Color.red
+    let possibleDigits = Array(1...99)
     
+    var results: String {
+        let selected = possibleDigits.random(7).sorted()
+        let strings = selected.map(String.init) //converting selected strings to an array of strings -- stringified
+        return strings.joined(separator: ", ")
+    }
     var body: some View {
-        VStack {
-            Button("Request Permission") {
-                UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
-                    if success {
-                        print("Successful! All set.")
-                    } else if let error = error {
-                        print(error.localizedDescription)
-                    }
-                }
-            }
-            Button("Schedule Notification") {
-                let content = UNMutableNotificationContent()
-                content.title = "Feed the hunger within"
-                content.subtitle = "Stay hungry"
-                content.sound = UNNotificationSound.default
-                
-                //show this notification five minutes from now
-                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
-                
-                //choose a random identifier
-                let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-                
-                //add our notiification request
-                UNUserNotificationCenter.current().add(request)
-                
-            }
-        }
+        
+        Text(results)
+        
+//        VStack {
+//            Button("Request Permission") {
+//                UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+//                    if success {
+//                        print("Successful! All set.")
+//                    } else if let error = error {
+//                        print(error.localizedDescription)
+//                    }
+//                }
+//            }
+//            Button("Schedule Notification") {
+//                let content = UNMutableNotificationContent()
+//                content.title = "Feed the hunger within"
+//                content.subtitle = "Stay hungry"
+//                content.sound = UNNotificationSound.default
+//
+//                //show this notification five minutes from now
+//                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+//
+//                //choose a random identifier
+//                let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+//
+//                //add our notiification request
+//                UNUserNotificationCenter.current().add(request)
+//
+//            }
+//        }
         
         
 //        List {
