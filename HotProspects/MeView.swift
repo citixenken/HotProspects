@@ -6,10 +6,46 @@
 //
 
 import SwiftUI
+import CoreImage.CIFilterBuiltins
 
 struct MeView: View {
+    
+    @State private var name = "Anon"
+    @State private var emailAddress = "anon@anonymous.io"
+    
+    let context = CIContext()
+    let filter = CIFilter.qrCodeGenerator()
+    
     var body: some View {
-        Text("Hello, Me!")
+        NavigationView {
+            Form {
+                TextField("Your name here", text: $name)
+                    .textContentType(.name)
+                    .font(.title)
+                
+                Image(uiImage: generateQRCode(from: "\(name)\n\(emailAddress)"))
+                    .resizable()
+                    .interpolation(.none) //neat
+                    .scaledToFit()
+                    .frame(width: 200, height: 200)
+                
+                TextField("Your email address", text: $emailAddress)
+                    .textContentType(.emailAddress)
+                    .font(.title)
+            }
+            .navigationTitle("Your code")
+        }
+    }
+    
+    func generateQRCode(from string: String) -> UIImage {
+        filter.message = Data(string.utf8)
+        
+        if let outputImage = filter.outputImage {
+            if let cgimg = context.createCGImage(outputImage, from: outputImage.extent) {
+                return UIImage(cgImage: cgimg)
+            }
+        }
+        return UIImage(systemName: "xmark.circle") ?? UIImage()
     }
 }
 
